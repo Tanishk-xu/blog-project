@@ -1,0 +1,59 @@
+body{
+  margin:0;
+  font-family:Segoe UI,sans-serif;
+  background:#020617;
+  color:#e5e7eb;
+}
+
+/* NAVBAR */
+nav{
+  background:#020617;
+  padding:15px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 0 20px rgba(74,222,128,0.5);
+}
+nav a{
+  color:#e5e7eb;
+  text-decoration:none;
+  margin-left:20px;
+  font-weight:600;
+}
+nav a:hover{
+  color:#4ade80;
+}
+
+/* BLOG CARD */
+.card{
+  background:#020617;
+  padding:20px;
+  border-radius:15px;
+  margin:20px auto;
+  width:80%;
+  box-shadow:0 0 15px rgba(74,222,128,0.3);
+  transition:.3s;
+}
+.card:hover{
+  transform:translateY(-5px);
+}
+
+/* BUTTON */
+button{
+  background:#4ade80;
+  border:none;
+  padding:6px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* BLOG DETAILS */
+.details{
+  width:80%;
+  margin:40px auto;
+  background:#020617;
+  padding:30px;
+  border-radius:15px;
+  box-shadow:0 0 15px rgba(74,222,128,0.3);
+}
