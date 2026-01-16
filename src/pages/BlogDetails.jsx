@@ -1,71 +1,43 @@
-import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import "./BlogDetails.css";
 
 export default function BlogDetails() {
 
-  const [likes, setLikes] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // Page load hone par check kare
-  useEffect(() => {
-    const savedLike = localStorage.getItem("liked");
+  const blogs = JSON.parse(localStorage.getItem("blogsData")) || [];
 
-    if (savedLike === "true") {
-      setIsLiked(true);
-      setLikes(1);
-    }
-  }, []);
+  const blog = blogs.find(b => b.id == id);
 
-  const handleLike = () => {
-    if (isLiked) {
-      alert("❌ You already liked this post!");
-      return;
-    }
-
-    setLikes(1);
-    setIsLiked(true);
-    localStorage.setItem("liked", "true");
-  };
+  if (!blog) {
+    return <h2 style={{ padding: "30px" }}>Blog not found</h2>;
+  }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="detail-page">
 
-      <h2>My Lifestyle Journey</h2>
-      <p>This is my lifestyle blog</p>
-
-      {/* LIKE BUTTON */}
-      <button
-        onClick={handleLike}
-        style={{
-          background: "#22c55e",
-          color: "white",
-          padding: "8px 15px",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer"
-        }}
-      >
-        ❤️ Like {likes}
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        ← Back
       </button>
 
-      <hr />
+      <div className="detail-card">
 
-      <h3>Comments</h3>
-      <input
-        type="text"
-        placeholder="Write comment..."
-        style={{ padding: "6px", width: "200px" }}
-      />
-      <br /><br />
-      <button style={{
-        background: "#0ea5e9",
-        color: "white",
-        border: "none",
-        padding: "6px 12px",
-        borderRadius: "5px"
-      }}>
-        Post
-      </button>
+        {blog.img && (
+          <img src={blog.img} alt="blog" className="detail-img" />
+        )}
 
+        <h1>{blog.title}</h1>
+
+        <p className="detail-text">
+          {blog.desc}
+        </p>
+
+        <div className="detail-actions">
+          <span>❤️ {blog.likes}</span>
+        </div>
+
+      </div>
     </div>
   );
 }

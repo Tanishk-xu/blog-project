@@ -1,78 +1,117 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Blogs.css";
 
 export default function Blogs() {
 
+  const navigate = useNavigate();
+
   const defaultBlogs = [
-    { id: 1, title: "My Lifestyle Journey" },
-    { id: 2, title: "Learning React" }
+    { id: 1, title: "My Lifestyle Journey", desc: "Improve myself daily", likes: 0, img:"https://source.unsplash.com/400x250/?life" },
+    { id: 2, title: "Learning React", desc: "React step by step", likes: 0, img:"https://source.unsplash.com/400x250/?code" },
+    { id: 3, title: "Introduction to AI", desc: "What is AI?", likes: 0, img:"https://source.unsplash.com/400x250/?ai" }
   ];
 
   const [blogs, setBlogs] = useState([]);
+  const [dark, setDark] = useState(false);
+  const [likedBlogs, setLikedBlogs] = useState(
+    JSON.parse(localStorage.getItem("likedBlogs")) || []
+  );
 
   useEffect(() => {
-    const storedBlogs =
-      JSON.parse(localStorage.getItem("blogs")) || [];
-
-    setBlogs([...defaultBlogs, ...storedBlogs]);
+    const saved = JSON.parse(localStorage.getItem("blogsData"));
+    if (saved && saved.length > 0) setBlogs(saved);
+    else setBlogs(defaultBlogs);
   }, []);
 
-  // DELETE FUNCTION
-  const deleteBlog = (id) => {
+  useEffect(() => {
+    localStorage.setItem("blogsData", JSON.stringify(blogs));
+  }, [blogs]);
 
-    // default blogs protect
-    if (id === 1 || id === 2) {
-      alert("Default blogs cannot be deleted!");
+  const handleRead = (id) => {
+    navigate(`/blog/${id}`);
+  };
+
+  const likeBlog = (id) => {
+
+    if (likedBlogs.includes(id)) {
+      alert("You already liked this blog!");
       return;
     }
 
-    const storedBlogs =
-      JSON.parse(localStorage.getItem("blogs")) || [];
-
-    const updated = storedBlogs.filter(
-      (blog) => blog.id !== id
+    const updated = blogs.map(b =>
+      b.id === id ? { ...b, likes: b.likes + 1 } : b
     );
 
-    localStorage.setItem(
-      "blogs",
-      JSON.stringify(updated)
-    );
+    setBlogs(updated);
 
-    // refresh state
-    setBlogs([...defaultBlogs, ...updated]);
+    const newLiked = [...likedBlogs, id];
+    setLikedBlogs(newLiked);
+    localStorage.setItem("likedBlogs", JSON.stringify(newLiked));
+  };
+
+  const deleteBlog = (id) => {
+    if (window.confirm("Delete this blog?")) {
+      setBlogs(blogs.filter(b => b.id !== id));
+    }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className={dark ? "dark" : "light"}>
 
-      <h2>All Blogs</h2>
+      <div className="top-bar">
+        <h2>🚀 CodeWithTanishk Blogs</h2>
 
-      {blogs.map((blog) => (
-        <div key={blog.id}
-          style={{ marginBottom: "15px" }}>
+        <button
+          onClick={() => setDark(!dark)}
+          className="mode-btn"
+        >
+          {dark ? "☀ Light" : "🌙 Dark"}
+        </button>
+      </div>
 
-          <h3>{blog.title}</h3>
+      <div className="grid">
 
-          <Link to={`/blogs/${blog.id}`}>
-            Read
-          </Link>
+        {blogs.map(blog => (
+          <div key={blog.id} className="card animate">
 
-          <button
-            onClick={() => deleteBlog(blog.id)}
-            style={{
-              marginLeft: "10px",
-              background: "red",
-              color: "white",
-              border: "none",
-              padding: "5px 10px",
-              cursor: "pointer"
-            }}
-          >
-            Delete
-          </button>
+            <img src={blog.img} alt="blog" />
 
-        </div>
-      ))}
+            <span className="badge">
+              {blog.likes > 2 ? "🔥 Popular" : "🆕 New"}
+            </span>
+
+            <h3>{blog.title}</h3>
+            <p>{blog.desc}</p>
+
+            <div className="btn-row">
+
+              <button className="read"
+                onClick={() => handleRead(blog.id)}>
+                Read
+              </button>
+
+              <button className="like"
+                onClick={() => likeBlog(blog.id)}>
+                ❤️ {blog.likes}
+              </button>
+
+              <button className="del"
+                onClick={() => deleteBlog(blog.id)}>
+                Delete
+              </button>
+
+            </div>
+
+          </div>
+        ))}
+
+      </div>
+
+      <footer>
+        © 2026 | Made by Tanishk
+      </footer>
+
     </div>
   );
 }

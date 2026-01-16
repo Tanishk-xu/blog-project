@@ -57,3 +57,31 @@ button{
   border-radius:15px;
   box-shadow:0 0 15px rgba(74,222,128,0.3);
 }
+.blog-card{
+  background: white;
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.navbar{
+  background: linear-gradient(45deg,#4ade80,#22c55e);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo{
+  color: white;
+  font-weight: 700;
+}
+
+.nav-links a{
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.nav-links a:hover{
+  text-decoration: underline;
+}
