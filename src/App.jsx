@@ -8,7 +8,6 @@ import Home from "./pages/Home";
 import Blogs from "./pages/Blogs";
 import CreateBlog from "./pages/CreateBlog";
 import BlogDetails from "./pages/BlogDetails";
-import { Route } from "react-router-dom";
 
 export default function App() {
   return (
